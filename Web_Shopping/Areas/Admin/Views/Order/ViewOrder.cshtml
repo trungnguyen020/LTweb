@@ -1,0 +1,94 @@
+﻿@model IEnumerable<OrderDetails>
+@{
+    ViewData["title"] = "Order Details";
+    decimal Total = 0;
+    decimal Subtotal = 0;
+}
+<h3>Danh sách danh mục</h3>
+<table class="table" id="detail_order">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Order Code</th>
+            <th scope="col">UserName</th>
+            <th scope="col">ProductName</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            Subtotal = item.Quantity * item.Price;
+            Total += Subtotal;
+            <tr>
+                <input type="hidden" asp-for="@item.OrderCode" class="getId" />
+                <th>#</th>
+                <th>@item.OrderCode</th>
+                <th>@item.UserName</th>
+                <th>@item.Product.Name</th>
+                <th>@item.Price</th>
+                <th>@item.Quantity</th>
+                <th>@Subtotal.ToString("C")</th>
+            </tr>
+        }
+        <tr>
+            <th colspan="5">Total</th>
+            <td>@Total.ToString("C")</td>
+            <td>
+                @{
+                    // Lấy trạng thái từ ViewBag (Code này của bạn đã đúng)
+                    int currentStatus = (int)ViewBag.OrderStatus;
+                }
+
+                @if (currentStatus == 3)
+                {
+                    // Nếu đã hủy, chỉ hiển thị text, không hiển thị dropdown
+                    <span class="text text-danger">Đơn hàng đã hủy</span>
+                }
+                else
+                {
+                    <select class="form-control select-update-order">
+
+                        <option value="1" selected="@(currentStatus == 1)">
+                            Đơn hàng mới
+                        </option>
+
+                        <option value="0" selected="@(currentStatus == 0)">
+                            Đơn hàng đã thanh toán
+                        </option>
+
+                    </select>
+                }
+            </td>
+        </tr>
+        <tr>
+            <a asp-action="Index" asp-controller="Order" class="btn btn-outline-success btn-sm">Quay về đơn hàng</a>
+        </tr>
+    </tbody>
+</table>
+@section Script{
+    <script>
+        $(document).ready(function() {
+            $('.select-update-order').change(function(){
+                var status = $(this).val();
+                var ordercode = $('.getId').val();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateOrder")",
+                    data: {status: status, ordercode: ordercode},
+
+                    success: function(result){
+                        if(result.success){
+                            Swal.fire("Cập nhât thành công");
+                        }
+                        else{
+                            Swal.fire("Cập nhật thất bại");
+                        }
+                    },
+                });
+            });
+        });
+    </script>
+}

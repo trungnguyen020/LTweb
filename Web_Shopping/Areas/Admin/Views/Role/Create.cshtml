@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+@{
+    ViewData["title"] = "Thêm phân quyền";
+}
+<h4>Thêm phân quyền</h4>
+<div class="col-md-9">
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger" />
+        </div>
+
+        
+        
+
+
+
+        <div class="form-group">
+            <button class="btn btn-primary">Thêm phân quyền</button>
+        </div>
+    </form>
+    <a asp-action="Index" class="btn btn-danger">Quay về trang Phân quyền</a>
+</div>
+@section Script {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

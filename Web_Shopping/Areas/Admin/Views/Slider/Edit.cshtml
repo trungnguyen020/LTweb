@@ -1,0 +1,59 @@
+﻿@model SliderModel
+@{
+    ViewData["title"] = "Edit Slider";
+}
+<h4>Thêm</h4>
+<div class="col-md-9">
+    <form asp-action="Edit" asp-controller="Slider" enctype="multipart/form-data">
+        <input type="hidden" asp-for="@Model.Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger" />
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger" />
+        </div>
+
+        <div class="form-group">
+            <label>Status</label>
+            <select asp-for="Status" class="form-control">
+                @if (@Model.Status == 1) {
+                    <option selected value="1">Hiển thị</option>
+                    <option value="0">Ẩn</option>
+                }
+                else
+                {
+                    <option value="1">Hiển thị</option>
+                    <option selected value="0">Ẩn</option>
+                }
+
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Image</label>
+            <input asp-for="ImageUpLoad" class="form-control-file" />
+            <span asp-validation-for="ImageUpLoad" class="text-danger" />
+            <img src="~/media/slider/@Model.Image" width="100" height="80" />
+            <img id="imgpreview" class="pt-2" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary">Sửa slider</button>
+        </div>
+    </form>
+    <a asp-action="Index" class="btn btn-danger">Quay về trang slider</a>
+</div>
+@section Script {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $("#ImageUpLoad").change(function(){
+            readURL(this);
+        })
+    </script>
+}
