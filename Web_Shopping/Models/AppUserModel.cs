@@ -6,5 +6,6 @@ namespace Web_Shopping.Models
     {
         public string Occupation {  get; set; }
         public string RoleId { get; set; }
+        public string Address { get; set; }
     }
 }

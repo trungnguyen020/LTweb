@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -145,6 +146,72 @@ namespace Web_Shopping.Controllers
             }
 
             return View(model);
+        }
+        [Authorize] // Bắt buộc phải đăng nhập
+        public async Task<IActionResult> Details(string ordercode)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge(); 
+            }
+
+            var userEmail = user.Email;
+
+            var order = await _dataContext.Orders
+                                .FirstOrDefaultAsync(o => o.OrderCode == ordercode && o.UserName == userEmail);
+
+            if (order == null)
+            {
+                TempData["error"] = "Bạn không có quyền xem đơn hàng này.";
+                return RedirectToAction("History"); 
+            }
+
+            var orderDetails = await _dataContext.OrderDetails
+                                    .Include(od => od.Product)
+                                    .Where(od => od.OrderCode == ordercode)
+                                    .ToListAsync();
+
+            ViewBag.OrderStatus = order.Status;
+
+            return View(orderDetails);
+        }
+        // [HttpGet] Hiển thị trang hồ sơ
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+            return View(user);
+        }
+
+        // [HttpPost] Cập nhật thông tin
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile(AppUserModel userUpdate)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
+            // Cập nhật các thông tin
+            user.PhoneNumber = userUpdate.PhoneNumber;
+            user.Address = userUpdate.Address;
+            // user.Occupation = userUpdate.Occupation; // Nếu muốn sửa cả nghề nghiệp
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["success"] = "Cập nhật thông tin thành công!";
+                return RedirectToAction("Profile");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+            return View("Profile", user);
         }
     }
 }

@@ -11,6 +11,8 @@
             <th scope="col">UserName</th>
             <th scope="col">Order Date</th>
             <th scope="col">Order Status</th>
+            <th scope="col">Cancel</th>
+            <th scope="col">View</th>
         </tr>
     </thead>
     <tbody>
@@ -38,9 +40,14 @@
                     }
                 </td>
                 <td>
-                     @if (item.Status != 3){
+                     @if (item.Status == 1){
                         <a asp-action="CancelOrder" class="btn btn-danger btn-sm" asp-controller="Account" asp-route-ordercode="@item.OrderCode">Hủy đơn hàng</a>
                     }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-controller="Account" asp-route-ordercode="@item.OrderCode" class="btn btn-info btn-sm">
+                        Xem Đơn hàng
+                    </a>
                 </td>
             </tr>
         }

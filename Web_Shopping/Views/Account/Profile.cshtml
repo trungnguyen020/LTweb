@@ -1,0 +1,125 @@
+﻿@model AppUserModel
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml"; // Dùng layout của Login/Register
+}
+
+<style>
+    /* Copy bộ CSS đẹp từ trang Login sang cho đồng bộ */
+    .form-control-user {
+        border-radius: 50px !important;
+        padding: 1.5rem 1.5rem !important;
+        height: 50px !important;
+        font-size: 14px !important;
+        border: 1px solid #d1d3e2 !important;
+    }
+
+    .btn-user {
+        font-size: 16px !important;
+        border-radius: 50px !important;
+        padding: 12px 20px !important;
+        width: 100% !important;
+        font-weight: bold !important;
+        background-color: #4e73df !important;
+        border: 1px solid #4e73df !important;
+        color: white !important;
+        margin-top: 20px !important;
+        display: block !important;
+        transition: all 0.3s;
+    }
+
+        .btn-user:hover {
+            background-color: #2e59d9 !important;
+            transform: scale(1.02);
+        }
+
+    .btn-home {
+        background-color: #858796 !important;
+        border: 1px solid #858796 !important;
+        margin-top: 10px !important;
+    }
+
+        .btn-home:hover {
+            background-color: #60616f !important;
+        }
+
+    h1 {
+        color: #333;
+        font-weight: 400;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    h4 {
+        color: #4e73df;
+        font-weight: bold;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        text-transform: uppercase;
+        border-bottom: 2px solid #f0f2f5;
+        padding-bottom: 10px;
+    }
+
+    /* Tùy chỉnh textarea cho đẹp hơn */
+    textarea.form-control-user {
+        height: auto !important;
+        border-radius: 20px !important;
+    }
+</style>
+
+<div class="p-5">
+    <div class="text-center">
+        <h1>Hồ sơ của bạn</h1>
+    </div>
+
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-success" style="border-radius: 20px;">
+            <i class="fa fa-check-circle"></i> @TempData["success"]
+        </div>
+    }
+
+    <form asp-action="UpdateProfile" asp-controller="Account" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <h4>Thông tin tài khoản</h4>
+
+        <div class="form-group">
+            <label class="small mb-1" style="color: #858796; margin-left: 15px;">Tên đăng nhập</label>
+            <input asp-for="UserName" class="form-control form-control-user" readonly style="background-color: #eaecf4;" />
+        </div>
+
+        <div class="form-group">
+            <label class="small mb-1" style="color: #858796; margin-left: 15px;">Email</label>
+            <input asp-for="Email" class="form-control form-control-user" readonly style="background-color: #eaecf4;" />
+        </div>
+
+        <h4>Thông tin giao hàng</h4>
+
+        <div class="form-group">
+            <input asp-for="PhoneNumber" class="form-control form-control-user" placeholder="Số điện thoại liên hệ..." />
+            <span asp-validation-for="PhoneNumber" class="text-danger" style="padding-left: 15px"></span>
+        </div>
+
+        <div class="form-group">
+            <textarea asp-for="Address" class="form-control form-control-user" rows="3" placeholder="Địa chỉ nhận hàng (Số nhà, đường, phường/xã)..."></textarea>
+            <span asp-validation-for="Address" class="text-danger" style="padding-left: 15px"></span>
+        </div>
+
+        <button type="submit" class="btn btn-user">
+            Cập nhật hồ sơ
+        </button>
+
+        <a asp-controller="Home" asp-action="Index" class="btn btn-user btn-home">
+            <i class="fa fa-arrow-left"></i> Quay về trang chủ
+        </a>
+
+    </form>
+</div>
+
+@section Script {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

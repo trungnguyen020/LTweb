@@ -1,42 +1,93 @@
 ﻿@model UserModel
 @{
-	ViewData["Title"] = "Register User";
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
-<section id="form">
-	<!--form-->
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-4 col-sm-offset-1">
-				<div class="signup-form">
-					<!--sign up form-->
-					<h2>New User Signup!</h2>
-					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-					<form asp-action="Create" asp-controller="Account">
-						<div class="form-group">
-							<label>Username</label>
-							<input asp-for="Username" class="form-control" />
-							<span asp-validation-for="Username" class="text-danger" />
-						</div>
-						<div class="form-group">
-							<label>Email</label>
-							<input asp-for="Email" class="form-control" />
-							<span asp-validation-for="Email" class="text-danger" />
-						</div>
-						<div class="form-group">
-							<label>Password</label>
-							<input asp-for="Password" class="form-control" />
-							<span asp-validation-for="Password" class="text-danger" />
-						</div>
 
-						<button class="btn btn-default">Đăng kí</button>
-					</form>
-				</div><!--/sign up form-->
-			</div>
-		</div>
-	</div>
-</section><!--/form-->
+<style>
+    /* CSS dùng chung (Copy từ Login qua) */
+    .form-control-user {
+        border-radius: 50px !important;
+        padding: 1.5rem 1.5rem !important;
+        height: 50px !important;
+        font-size: 14px !important;
+        border: 1px solid #d1d3e2 !important;
+    }
+
+    .btn-user {
+        font-size: 16px !important;
+        border-radius: 50px !important;
+        padding: 12px 20px !important;
+        width: 100% !important;
+        font-weight: bold !important;
+        background-color: #4e73df !important; /* Màu xanh */
+        border: 1px solid #4e73df !important;
+        color: white !important;
+        margin-top: 20px !important;
+        display: block !important;
+        transition: all 0.3s;
+    }
+
+        .btn-user:hover {
+            background-color: #2e59d9 !important;
+            transform: scale(1.02);
+        }
+
+    .small {
+        color: #4e73df !important;
+        text-decoration: none !important;
+        font-size: 13px !important;
+    }
+
+        .small:hover {
+            text-decoration: underline !important;
+        }
+
+    .text-center {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    h1 {
+        color: #333;
+        font-weight: 400;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+</style>
+
+<div class="p-5">
+    <div class="text-center">
+        <h1>Tạo tài khoản!</h1>
+    </div>
+
+    <form asp-action="Create" asp-controller="Account">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <input asp-for="Username" class="form-control form-control-user" placeholder="Username" />
+            <span asp-validation-for="Username" class="text-danger" style="padding-left: 15px"></span>
+        </div>
+
+        <div class="form-group">
+            <input asp-for="Email" type="email" class="form-control form-control-user" placeholder="Email Address" />
+            <span asp-validation-for="Email" class="text-danger" style="padding-left: 15px"></span>
+        </div>
+
+        <div class="form-group">
+            <input asp-for="Password" type="password" class="form-control form-control-user" placeholder="Password" />
+            <span asp-validation-for="Password" class="text-danger" style="padding-left: 15px"></span>
+        </div>
+
+        <button class="btn btn-user">
+            Đăng kí
+        </button>
+
+    </form>
+</div>
+
 @section Script {
-	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
-	}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

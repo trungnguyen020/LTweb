@@ -1,107 +1,243 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-	<meta name="author" content="">
-	<title>@ViewData["title"] Admin Areas</title>
-	<link href="~/css/bootstrap.min.css" rel="stylesheet">
-	<link href="~/css/font-awesome.min.css" rel="stylesheet">
-	<link href="~/css/prettyPhoto.css" rel="stylesheet">
-	<link href="~/css/price-range.css" rel="stylesheet">
-	<link href="~/css/animate.css" rel="stylesheet">
-	<link href="~/css/main.css" rel="stylesheet">
-	<link href="~/css/responsive.css" rel="stylesheet">
-	<link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />
-	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.3/dist/sweetalert2.min.css" rel="stylesheet">
-	<!--[if lt IE 9]>
-	<script src="js/html5shiv.js"></script>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
-	<link rel="shortcut icon" href="images/ico/favicon.ico">
-	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
-	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
-	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
-	<link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-</head><!--/head-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<body>
-	<header id="header">
-		<!--header-->
+    <title>@ViewData["Title"] - Admin System</title>
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-		
+    <link href="https://startbootstrap.github.io/startbootstrap-sb-admin-2/css/sb-admin-2.min.css" rel="stylesheet">
 
-		<div class="header-bottom">
-			<!--header-bottom-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a asp-controller="Product">Sản phẩm</a></li>
-								<li><a asp-controller="Category">Danh mục</a></li>
-								<li><a asp-controller="Brand">Thương hiệu</a></li>
-								<li><a asp-controller="Slider">Slider</a></li>
-								<li><a asp-controller="Order">Đơn hàng</a></li>
-								<li><a asp-controller="Role">Phân quyền</a></li>
-								<li><a asp-controller="User">Tài khoản</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><!--/header-bottom-->
-	</header><!--/header-->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
+    <style>
+        /* Màu xanh chủ đạo cho Sidebar */
+        .bg-gradient-primary {
+            background-color: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+            background-size: cover;
+        }
+        /* Fix lỗi hiển thị icon sort của DataTables */
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before {
+            content: "\f0de";
+            font-family: "Font Awesome 5 Free";
+            right: 1em;
+        }
 
-	<section>
-		<div class="container">
-			<div class="row">
-				@Html.Partial("_NotificationPartial")
-				@RenderBody()
-			</div>
-		</div>
-	</section>
+        table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after {
+            content: "\f0dd";
+            font-family: "Font Awesome 5 Free";
+            right: 0.5em;
+        }
+    </style>
+</head>
 
-	<footer id="footer">
-		<!--Footer-->
-	
+<body id="page-top">
 
+    <div id="wrapper">
 
-	</footer><!--/Footer-->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Admin/Product">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Web Shopping <sup>Admin</sup></div>
+            </a>
 
+            <hr class="sidebar-divider my-0">
 
-	<script src="~/js/jquery.js"></script>
-	<script src="~/js/bootstrap.min.js"></script>
-	<script src="~/js/jquery.scrollUp.min.js"></script>
-	<script src="~/js/price-range.js"></script>
-	<script src="~/js/jquery.prettyPhoto.js"></script>
-	<script src="~/js/main.js"></script>
-	<script src="~/backend/js/site.js"></script>
-	<script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.3/dist/sweetalert2.all.min.js"></script>
-	<script>
-		$(function(){
-			var message = '@TempData["success"]';
-			if(message != '')
-				Swal.fire(message);
-		});
-	</script>
-	<script>
-		let table = new DataTable('#myTable');
-	</script>
-	@await RenderSectionAsync("Script", required:false)
+            <li class="nav-item active">
+                <a class="nav-link" asp-controller="Product" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Tổng quan</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">Quản lý Cửa hàng</div>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Product" asp-action="Index">
+                    <i class="fas fa-fw fa-box"></i>
+                    <span>Sản phẩm</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Category" asp-action="Index">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Danh mục</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Brand" asp-action="Index">
+                    <i class="fas fa-fw fa-tag"></i>
+                    <span>Thương hiệu</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Order" asp-action="Index">
+                    <i class="fas fa-fw fa-receipt"></i>
+                    <span>Đơn hàng</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Slider" asp-action="Index">
+                    <i class="fas fa-fw fa-images"></i>
+                    <span>Slider (Banner)</span>
+                </a>
+            </li>
+    
+
+            @if (User.IsInRole("Admin"))
+            {
+                <hr class="sidebar-divider">
+
+                <div class="sidebar-heading">
+                    Hệ thống
+                </div>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="User" asp-action="Index">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Tài khoản (User)</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Role" asp-action="Index">
+                        <i class="fas fa-fw fa-user-shield"></i>
+                        <span>Phân quyền (Role)</span>
+                    </a>
+                </li>
+            }
+
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <div id="content">
+
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto">
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Xin chào, @User.Identity?.Name</span>
+                                <img class="img-profile rounded-circle" src="https://startbootstrap.github.io/startbootstrap-sb-admin-2/img/undraw_profile.svg">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="/">
+                                    <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Về trang bán hàng
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/Account/Logout">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Đăng xuất
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <div class="container-fluid">
+
+                    @Html.Partial("_NotificationPartial")
+
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            @RenderBody()
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Web Shopping Admin 2025</span>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+    <script src="https://startbootstrap.github.io/startbootstrap-sb-admin-2/js/sb-admin-2.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Tự động kích hoạt DataTables nếu có bảng id="myTable"
+            if ($('#myTable').length) {
+                $('#myTable').DataTable();
+            }
+
+            // Hiển thị SweetAlert từ TempData
+            var message = '@TempData["success"]';
+            if (message != '') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: message,
+                    confirmButtonColor: '#4e73df'
+                });
+            }
+
+            var error = '@TempData["error"]';
+            if (error != '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: error,
+                    confirmButtonColor: '#e74a3b'
+                });
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Script", required: false)
+
 </body>
 </html>

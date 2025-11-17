@@ -8,7 +8,7 @@
         <tr>
             <th scope="col">User Name</th>
             <th scope="col">Email</th>
-            <th scope="col">PasswordHash</th>
+            <th scope="col">PhoneNumber</th>
             <th scope="col">Role</th>
             <th scope="col">User Manage</th>
         </tr>
@@ -19,7 +19,7 @@
             <tr>
                 <td>@usersWithRole.User.UserName</td>
                 <td>@usersWithRole.User.Email</td>
-                <td>@usersWithRole.User.PasswordHash</td>
+                <td>@usersWithRole.User.PhoneNumber</td>
                 <td>@usersWithRole.RoleName</td>
                 <td>
                     <a asp-action="Edit" class="btn btn-warning btn-sm" asp-controller="User" asp-route-Id="@usersWithRole.User.Id">Sửa</a>

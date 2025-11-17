@@ -1,41 +1,119 @@
 ﻿@model LoginViewModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
-<section id="">
-	<!--form-->
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-4 col-sm-offset-1">
-				<div class="login-form">
-					<!--login form-->
-					<h2>Login to your account</h2>
-					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-					<form asp-action="Login" asp-controller="Account">
-						<div class="form-group">
-							<label>Username</label>
-							<input asp-for="Username" class="form-control" />
-							<span asp-validation-for="Username" class="text-danger" />
-						</div>
-						
-						<div class="form-group">
-							<label>Password</label>
-							<input asp-for="Password" class="form-control" />
-							<span asp-validation-for="Password" class="text-danger" />
-						</div>
-												
-							<button class="btn btn-default">Đăng nhập</button>
 
-							<a asp-action="Create" asp-controller="Account" class="btn btn-success">Đăng ký</a>
-						<div style="margin-top: 15px;">
-							<a asp-action="ForgotPassword" asp-controller="Account">Quên mật khẩu?</a>
-						</div>
-					</form>
-				</div><!--/login form-->
-			</div>
-		</div>
-	</div>
-</section><!--/form-->
+<style>
+    /* 1. Ô NHẬP LIỆU (Bo tròn) */
+    .form-control-user {
+        border-radius: 50px !important; /* Bo tròn */
+        padding: 1.5rem 1.5rem !important;
+        height: 50px !important;
+        font-size: 14px !important;
+        border: 1px solid #d1d3e2 !important;
+    }
+
+    /* 2. NÚT BẤM (Màu xanh + Bo tròn) */
+    /* Dùng !important để đè màu cam của E-Shopper */
+    .btn-user {
+        font-size: 16px !important;
+        border-radius: 50px !important;
+        padding: 12px 20px !important;
+        width: 100% !important;
+        font-weight: bold !important;
+        background-color: #4e73df !important; /* Màu xanh dương */
+        border: 1px solid #4e73df !important;
+        color: white !important;
+        margin-top: 20px !important;
+        display: block !important;
+        transition: all 0.3s;
+    }
+
+        .btn-user:hover {
+            background-color: #2e59d9 !important;
+            color: white !important;
+            transform: scale(1.02);
+        }
+
+    /* 3. SỬA LỖI CHECKBOX BỊ TO (Quan trọng nhất) */
+    /* Bắt buộc checkbox về kích thước chuẩn */
+    .custom-checkbox-container input[type="checkbox"] {
+        width: auto !important; /* Không cho giãn 100% */
+        height: auto !important; /* Không cho cao 100% */
+        display: inline-block !important; /* Nằm cùng dòng với chữ */
+        margin-right: 10px !important;
+        cursor: pointer;
+        transform: scale(1.2); /* Phóng to nhẹ cái ô tick cho dễ bấm */
+    }
+
+    .custom-checkbox-container label {
+        display: flex !important;
+        align-items: center !important; /* Căn giữa checkbox và chữ */
+        font-weight: normal !important;
+        color: #858796 !important;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    /* Link quên mật khẩu */
+    .small {
+        color: #4e73df !important;
+        text-decoration: none !important;
+        font-size: 13px !important;
+    }
+
+        .small:hover {
+            text-decoration: underline !important;
+        }
+
+    .text-center {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    h1 {
+        color: #333;
+        font-weight: 400;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+</style>
+
+<div class="p-5">
+    <div class="text-center">
+        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <form asp-action="Login" asp-controller="Account" class="user">
+
+        <div class="form-group">
+            <input asp-for="Username" class="form-control form-control-user" placeholder="User Name..." />
+            <span asp-validation-for="Username" class="text-danger" style="padding-left: 15px; font-size: 12px;"></span>
+        </div>
+
+        <div class="form-group">
+            <input asp-for="Password" type="password" class="form-control form-control-user" placeholder="Password" />
+            <span asp-validation-for="Password" class="text-danger" style="padding-left: 15px; font-size: 12px;"></span>
+        </div>
+
+        <button class="btn btn-user btn-block">
+            Đăng nhập
+        </button>
+
+    </form>
+
+    <hr>
+
+    <div class="text-center">
+        <a class="small" asp-action="ForgotPassword" asp-controller="Account">Quên mật khẩu?</a>
+    </div>
+    <div class="text-center">
+        <a class="small" asp-action="Create" asp-controller="Account">Tạo tài khoản mới!</a>
+    </div>
+</div>
 @section Script {
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");

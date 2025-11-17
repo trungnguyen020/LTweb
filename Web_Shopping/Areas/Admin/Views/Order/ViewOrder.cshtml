@@ -1,16 +1,71 @@
 ﻿@model IEnumerable<OrderDetails>
 @{
-    ViewData["title"] = "Order Details";
+    ViewData["title"] = "Chi tiết đơn hàng";
     decimal Total = 0;
     decimal Subtotal = 0;
+
+    // Lấy dữ liệu từ ViewBag mà Controller đã gửi
+    var orderInfo = ViewBag.Order as Web_Shopping.Models.OrderModels;
+    var userInfo = ViewBag.UserProfile as Web_Shopping.Models.AppUserModel;
+    int currentStatus = (int)ViewBag.OrderStatus;
 }
-<h3>Danh sách danh mục</h3>
+
+<h3>Chi tiết đơn hàng: <span style="color: #4e73df;">@orderInfo?.OrderCode</span></h3>
+<hr />
+
+<!-- SỬA LỖI LOGIC 1: Hiển thị thông tin giao hàng thông minh -->
+<div class="card mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Thông tin người nhận</h6>
+    </div>
+    <div class="card-body">
+        @if (orderInfo != null)
+        {
+            <p><strong>Họ tên (Email):</strong> @orderInfo.UserName</p>
+
+            <p>
+                <strong>Số điện thoại:</strong>
+                @if (orderInfo.PhoneNumber.Contains("Chưa cập nhật") && userInfo != null && !string.IsNullOrEmpty(userInfo.PhoneNumber))
+                {
+                    <!-- Lấy từ Profile nếu đơn hàng thiếu -->
+                    <span class="text-success" style="font-weight:bold;">
+                        @userInfo.PhoneNumber
+                        <small>(Đã cập nhật từ Profile)</small>
+                    </span>
+                }
+                else
+                {
+                    <!-- Lấy từ Đơn hàng -->
+                    @orderInfo.PhoneNumber
+                }
+            </p>
+
+            <p>
+                <strong>Địa chỉ:</strong>
+                @if (orderInfo.Address.Contains("Chưa cập nhật") && userInfo != null && !string.IsNullOrEmpty(userInfo.Address))
+                {
+                    <!-- Lấy từ Profile nếu đơn hàng thiếu -->
+                    <span class="text-success" style="font-weight:bold;">
+                        @userInfo.Address
+                        <small>(Đã cập nhật từ Profile)</small>
+                    </span>
+                }
+                else
+                {
+                    <!-- Lấy từ Đơn hàng -->
+                    @orderInfo.Address
+                }
+            </p>
+            <p><strong>Ngày đặt:</strong> @orderInfo.CreateDate.ToString("dd/MM/yyyy HH:mm")</p>
+        }
+    </div>
+</div>
+
 <table class="table" id="detail_order">
     <thead>
         <tr>
             <th scope="col">#</th>
             <th scope="col">Order Code</th>
-            <th scope="col">UserName</th>
             <th scope="col">ProductName</th>
             <th scope="col">Price</th>
             <th scope="col">Quantity</th>
@@ -23,34 +78,28 @@
             Subtotal = item.Quantity * item.Price;
             Total += Subtotal;
             <tr>
-                <input type="hidden" asp-for="@item.OrderCode" class="getId" />
-                <th>#</th>
-                <th>@item.OrderCode</th>
-                <th>@item.UserName</th>
-                <th>@item.Product.Name</th>
-                <th>@item.Price</th>
-                <th>@item.Quantity</th>
-                <th>@Subtotal.ToString("C")</th>
+                <!-- SỬA LỖI 2: Xóa input hidden 'getId' ở đây -->
+                <!-- SỬA LỖI 3: Đổi 'th' thành 'td' -->
+                <td>#</td>
+                <td>@item.OrderCode</td>
+                <td>@item.Product.Name</td>
+                <td>@item.Price.ToString("C")</td> <!-- Thêm định dạng tiền tệ -->
+                <td>@item.Quantity</td>
+                <td>@Subtotal.ToString("C")</td> <!-- Thêm định dạng tiền tệ -->
             </tr>
         }
         <tr>
-            <th colspan="5">Total</th>
+            <th colspan="4">Total</th>
             <td>@Total.ToString("C")</td>
             <td>
-                @{
-                    // Lấy trạng thái từ ViewBag (Code này của bạn đã đúng)
-                    int currentStatus = (int)ViewBag.OrderStatus;
-                }
-
                 @if (currentStatus == 3)
                 {
-                    // Nếu đã hủy, chỉ hiển thị text, không hiển thị dropdown
-                    <span class="text text-danger">Đơn hàng đã hủy</span>
+                    <span class="text-danger font-weight-bold">ĐƠN HÀNG ĐÃ HỦY</span>
                 }
                 else
                 {
-                    <select class="form-control select-update-order">
-
+                    <!-- SỬA LỖI 2: Thêm 'data-ordercode' vào select -->
+                    <select class="form-control select-update-order" data-ordercode="@orderInfo.OrderCode">
                         <option value="1" selected="@(currentStatus == 1)">
                             Đơn hàng mới
                         </option>
@@ -58,22 +107,28 @@
                         <option value="0" selected="@(currentStatus == 0)">
                             Đơn hàng đã thanh toán
                         </option>
-
                     </select>
                 }
             </td>
         </tr>
-        <tr>
-            <a asp-action="Index" asp-controller="Order" class="btn btn-outline-success btn-sm">Quay về đơn hàng</a>
-        </tr>
     </tbody>
 </table>
-@section Script{
+
+<!-- SỬA LỖI 3: Chuyển link "Quay về" ra ngoài bảng -->
+<div style="margin-top: 20px;">
+    <a asp-action="Index" asp-controller="Order" class="btn btn-outline-success btn-sm">Quay về danh sách</a>
+</div>
+
+
+@section Script {
     <script>
         $(document).ready(function() {
             $('.select-update-order').change(function(){
                 var status = $(this).val();
-                var ordercode = $('.getId').val();
+
+                // SỬA LỖI 2: Lấy ordercode từ 'data-' attribute, không dùng class 'getId'
+                var ordercode = $(this).data('ordercode');
+
                 $.ajax({
                     type: "POST",
                     url: "@Url.Action("UpdateOrder")",
@@ -81,10 +136,17 @@
 
                     success: function(result){
                         if(result.success){
-                            Swal.fire("Cập nhât thành công");
+                            Swal.fire(
+                                'Thành công!',
+                                'Cập nhật trạng thái thành công.',
+                                'success'
+                            ).then(() => {
+                                // Tải lại trang để thấy trạng thái "Đã hủy" (nếu chọn Hủy)
+                                location.reload();
+                            });
                         }
                         else{
-                            Swal.fire("Cập nhật thất bại");
+                            Swal.fire("Lỗi!", "Cập nhật thất bại.", "error");
                         }
                     },
                 });

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Web_Shopping.Models;
 using Web_Shopping.Repository;
+using Microsoft.AspNetCore.Identity;
 
 namespace Web_Shopping.Areas.Admin.Controllers
 {
@@ -11,9 +12,11 @@ namespace Web_Shopping.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly DataContext _dataContext;
-        public OrderController(DataContext context)
+        private readonly UserManager<AppUserModel> _userManager;
+        public OrderController(DataContext context, UserManager<AppUserModel> userManager)
         {
             _dataContext = context;
+            _userManager = userManager;
         }
         public async Task<IActionResult> Index(int pg = 1)
         {
@@ -49,6 +52,9 @@ namespace Web_Shopping.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.OrderStatus = order.Status;
+            ViewBag.Order = order;
+            var userInfo = await _userManager.FindByEmailAsync(order.UserName);
+            ViewBag.UserProfile = userInfo;
             var DetailsOrder = await _dataContext.OrderDetails.Include(od=>od.Product).Where(od=>od.OrderCode==ordercode).ToListAsync();
             return View(DetailsOrder);
         }
@@ -64,7 +70,7 @@ namespace Web_Shopping.Areas.Admin.Controllers
             try
             {
                 await _dataContext.SaveChangesAsync();
-                return Ok(new {success = true, message = "status của đơn hàng đã sửa thành công"});
+                return Ok(new {success = true, message = "trạng thái của đơn hàng đã sửa thành công"});
             }
             catch (Exception ex)
             {
