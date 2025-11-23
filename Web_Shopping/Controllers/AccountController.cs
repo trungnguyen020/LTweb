@@ -91,7 +91,7 @@ namespace Web_Shopping.Controllers
                 IdentityResult result = await _userManager.CreateAsync(newUser, user.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(newUser, "Author");
+                    await _userManager.AddToRoleAsync(newUser, "User");
                     TempData["success"] = "Tạo tài khoản thành công.";
                     return Redirect("/account/login");
                 }

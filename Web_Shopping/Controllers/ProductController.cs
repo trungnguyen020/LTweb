@@ -32,7 +32,7 @@ namespace Web_Shopping.Controllers
                 return NotFound();
             }
             var relatedProducts = await _dataContext.Products
-            .Where(p=>p.CategoryId == productById.CategoryId && p.Id != productById.Id)
+            .Where(p=>(p.CategoryId == productById.CategoryId || p.BrandId == productById.BrandId) && p.Id != productById.Id)
             .Take(4)
             .ToListAsync();
             ViewBag.RelatedProducts = relatedProducts;

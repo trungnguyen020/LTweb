@@ -26,7 +26,7 @@ namespace Web_Shopping.Repository
             if (!roleManager.Roles.Any())
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
-                await roleManager.CreateAsync(new IdentityRole("Author"));
+                await roleManager.CreateAsync(new IdentityRole("User"));
                 await roleManager.CreateAsync(new IdentityRole("Publisher"));
             }
             if (!userManager.Users.Any(u => u.UserName == "admin"))

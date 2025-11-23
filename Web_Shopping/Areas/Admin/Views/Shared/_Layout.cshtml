@@ -170,7 +170,7 @@
                 </nav>
                 <div class="container-fluid">
 
-                    @Html.Partial("_NotificationPartial")
+                    
 
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -215,7 +215,7 @@
             }
 
             // Hiển thị SweetAlert từ TempData
-            var message = '@TempData["success"]';
+            var message = '@Html.Raw(TempData["success"])';
             if (message != '') {
                 Swal.fire({
                     icon: 'success',
@@ -225,7 +225,7 @@
                 });
             }
 
-            var error = '@TempData["error"]';
+            var error = '@Html.Raw(TempData["error"])';
             if (error != '') {
                 Swal.fire({
                     icon: 'error',
