@@ -1,76 +1,163 @@
 ﻿@using Web_Shopping.Models.ViewModels
 @model CartItemVIewModel
-<h4>Giỏ hàng</h4>
-<section id="cart_items">
-	<div class="container">
-		<div class="breadcrumbs">
-			<ol class="breadcrumb">
-				<li><a href="#">Home</a></li>
-				<li class="active">Shopping Cart</li>
-			</ol>
-		</div>
-		<div class="table-responsive cart_info">
-			<table class="table table-condensed">
-				<thead>
-					<tr class="cart_menu">
-						<td class="image">Item</td>
-						<td class="description"></td>
-						<td class="price">Price</td>
-						<td class="quantity">Quantity</td>
-						<td class="total">Total</td>
-						<td></td>
-					</tr>
-				</thead>
-				<tbody>
-					@if (Model.CartItem.Count > 0)
-					{
-						@foreach(var item in Model.CartItem){
-						<tr>
-							<td class="cart_product">
-								<a><img src="~/media/products/@item.Image" width="75%" height="200"></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">@item.ProductName</a></h4>
-							</td>
-							<td class="cart_price">
-									<p>@item.Price.ToString("#, ##0 VNĐ")</p>
-							</td>
-							<td >
-								
-									<a class="btn btn-default btn-sm" asp-controller="Cart" asp-action="Increase" asp-route-id="@item.ProductId"> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="@item.Quantity" autocomplete="off" size="2">
-									<a class="btn btn-success btn-sm" asp-controller="Cart" asp-action="Decrease" asp-route-id="@item.ProductId"> - </a>
-									<a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductId"> Remove </a>
-								
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">@Model.CartItem.Where(x=>x.ProductId == @item.ProductId).Sum(x=>x.Quantity*x.Price).ToString()</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
-						}
-						<tr rowspan="5">
-							<td colspan="6">Grand Total: <p class="cart_total_price">@Model.GrandTotal.ToString()</p></td>
-							<td><a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="Clear"> Clear </a></td>
-							@if (User.Identity?.IsAuthenticated ?? false)
-							{
-								<td><a class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Checkout </a></td>
-							}
-						</tr>
-					}
-					else
-					{
-						<tr>
-							<td colspan="5">
-								<h4>Đơn hàng của bạn trống</h4>
-							</td>
-						</tr>
-					}
 
-				</tbody>
-			</table>
-		</div>
-	</div>
-</section> <!--/#cart_items-->
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<section id="cart_items">
+    <div class="container">
+        
+
+        <div class="table-responsive cart_info">
+            <table class="table table-condensed">
+                <thead>
+                    <tr class="cart_menu">
+                        <td class="image">Image</td>
+                        <td class="description">Product</td>
+                        <td class="price">Price</td>
+                        <td class="quantity">Quantity</td>
+                        <td class="total">Total</td>
+                        <td>Xóa</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.CartItem.Count > 0)
+                    {
+                        @foreach (var item in Model.CartItem)
+                        {
+                            <tr id="row-@item.ProductId"> <td class="cart_product">
+                                    <a href=""><img src="~/media/products/@item.Image" alt="" style="width: 75px; height: auto;"></a>
+                                </td>
+                                <td class="cart_description">
+                                    <h4><a href="">@item.ProductName</a></h4>
+                                </td>
+                                <td class="cart_price">
+                                    <p>@item.Price.ToString("#,##0 VNĐ")</p>
+                                </td>
+                                <td class="cart_quantity">
+                                    <div class="cart_quantity_button">
+                                        <a class="cart_quantity_down btn-decrease" href="javascript:void(0)" data-id="@item.ProductId"> - </a>
+                                        
+                                        <input class="cart_quantity_input" type="text" name="quantity" value="@item.Quantity" autocomplete="off" size="2" id="quantity-@item.ProductId" readonly>
+                                        
+                                        <a class="cart_quantity_up btn-increase" href="javascript:void(0)" data-id="@item.ProductId"> + </a>
+                                    </div>
+                                </td>
+                                <td class="cart_total">
+                                    <p class="cart_total_price" id="subtotal-@item.ProductId">
+                                        @((item.Quantity * item.Price).ToString("#,##0 VNĐ"))
+                                    </p>
+                                </td>
+                                <td class="cart_delete">
+                                    <a class="cart_quantity_delete" asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductId"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                        }
+                        
+                        <tr>
+                            <td colspan="4" style="text-align: right; font-weight: bold; font-size: 18px;">
+                                Tổng cộng:
+                            </td>
+                            <td colspan="2">
+                                <p class="cart_total_price" id="grand-total" style="margin-bottom: 0;">
+                                    @Model.GrandTotal.ToString("#,##0 VNĐ")
+                                </p>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="6" style="text-align: right;">
+                                <a class="btn btn-default check_out" asp-controller="Cart" asp-action="Clear" style="margin-right: 10px;">Xóa tất cả</a>
+                                @if (User.Identity?.IsAuthenticated ?? false)
+                                {
+                                    <a class="btn btn-primary check_out" asp-controller="Checkout" asp-action="Checkout">Thanh toán</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary check_out" asp-controller="Account" asp-action="Login">Đăng nhập để thanh toán</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <h3 class="text-danger">Giỏ hàng của bạn đang trống!</h3>
+                                <a asp-controller="Home" asp-action="Index" class="btn btn-primary" style="margin-top: 15px;">Tiếp tục mua sắm</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+@section Script {
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            $(document).ready(function () {
+
+                // --- XỬ LÝ TĂNG SỐ LƯỢNG (AJAX) ---
+                $('.btn-increase').off('click').on('click', function (e) {
+                    e.preventDefault();
+                    var btn = $(this);
+                    var id = btn.data('id');
+
+                    $.ajax({
+                        url: '/Cart/Increase',
+                        type: 'POST',
+                        data: { Id: id },
+                        success: function (result) {
+                            if (result.success) {
+                                $('#quantity-' + id).val(result.qty);
+                                $('#subtotal-' + id).text(result.subTotal);
+                                $('#grand-total').text(result.grandTotal);
+                            }
+                        },
+                        error: function () {
+                            Swal.fire("Lỗi", "Không thể cập nhật giỏ hàng", "error");
+                        }
+                    });
+                });
+
+                // --- XỬ LÝ GIẢM SỐ LƯỢNG (AJAX) ---
+                $('.btn-decrease').off('click').on('click', function (e) {
+                    e.preventDefault();
+                    var btn = $(this);
+                    var id = btn.data('id');
+
+                    $.ajax({
+                        url: '/Cart/Decrease',
+                        type: 'POST',
+                        data: { Id: id },
+                        success: function (result) {
+                            if (result.success) {
+                                if (result.isEmpty) {
+                                    // Giỏ hàng trống -> Reload
+                                    location.reload();
+                                }
+                                else if (result.qty === 0) {
+                                    // Số lượng về 0 -> Xóa dòng
+                                    $('#row-' + id).fadeOut(300, function() { $(this).remove(); });
+                                    $('#grand-total').text(result.grandTotal);
+                                }
+                                else {
+                                    // Cập nhật số lượng
+                                    $('#quantity-' + id).val(result.qty);
+                                    $('#subtotal-' + id).text(result.subTotal);
+                                    $('#grand-total').text(result.grandTotal);
+                                }
+                            }
+                        },
+                        error: function () {
+                            Swal.fire("Lỗi", "Không thể cập nhật giỏ hàng", "error");
+                        }
+                    });
+                });
+
+            });
+        </script>
+}
