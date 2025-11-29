@@ -72,13 +72,24 @@ namespace Web_Shopping.Controllers
         {
             if (ModelState.IsValid)
             {
-                Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginVM.Username, loginVM.Password, false,false);
-                if (result.Succeeded) 
+                var user = await _userManager.FindByNameAsync(loginVM.Username);
+
+                if (user != null)
                 {
-                    // return RedirectToAction(loginVM.ReturnUrl ?? "/");
-                    return RedirectToAction("Index", "Home");
+                    if (!string.Equals(user.UserName, loginVM.Username, StringComparison.Ordinal))
+                    {
+                        ModelState.AddModelError("", "Sai tên đăng nhập hoặc mật khẩu");
+                        return View(loginVM);
+                    }
+                    var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
-                ModelState.AddModelError("", "Sai tên đăng nhập hoặc tài khoản");
+
+                ModelState.AddModelError("", "Sai tên đăng nhập hoặc mật khẩu");
             }
             return View(loginVM);
         }

@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Báo cáo doanh thu";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <h1 class="h3 mb-4 text-gray-800">Báo cáo doanh thu chi tiết</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Biểu đồ doanh thu theo tuần</h6>
+            <div class="form-group mb-0">
+                <input type="week" id="weekSelector" class="form-control" />
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="chart-bar" style="height: 500px;">
+                <canvas id="myBarChart"></canvas>
+            </div>
+           
+        </div>
+    </div>
+
+</div>
+
+@section Script {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var myBarChart;
+
+        $(document).ready(function () {
+            
+            loadData(null, null);
+
+            $('#weekSelector').change(function() {
+                var weekValue = $(this).val();
+                if(weekValue) {
+                    var range = getDateRangeOfWeek(weekValue);
+                    loadData(range.start, range.end);
+                }
+            });
+        });
+
+        function loadData(fromDate, toDate) {
+            $.ajax({
+                url: "/Admin/Home/GetRevenueStatistic",
+                type: "POST",
+                data: { fromDate: fromDate, toDate: toDate },
+                success: function (data) {
+                    var labels = [];
+                    var values = [];
+                    $.each(data, function (index, item) {
+                        labels.push(item.date);
+                        values.push(item.total);
+                    });
+                    renderBarChart(labels, values);
+                },
+                error: function (error) {
+                    console.log("Lỗi: ", error);
+                }
+            });
+        }
+
+        function renderBarChart(labels, values) {
+            var ctx = document.getElementById("myBarChart");
+            if (myBarChart) myBarChart.destroy(); // Hủy biểu đồ cũ trước khi vẽ mới
+
+            myBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Doanh thu",
+                        backgroundColor: "#4e73df",
+                        hoverBackgroundColor: "#2e59d9",
+                        borderColor: "#4e73df",
+                        data: values,
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) { return value.toLocaleString('vi-VN') + ' đ'; }
+                            }
+                        }]
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, chart) {
+                                return tooltipItem.yLabel.toLocaleString('vi-VN') + ' VNĐ';
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getDateRangeOfWeek(weekString) {
+            var split = weekString.split('-W');
+            var year = parseInt(split[0]);
+            var week = parseInt(split[1]);
+
+            var simple = new Date(year, 0, 1 + (week - 1) * 7);
+            var dow = simple.getDay();
+            var ISOweekStart = simple;
+            if (dow <= 4)
+                ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+            else
+                ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+
+            var start = new Date(ISOweekStart);
+            var end = new Date(ISOweekStart);
+            end.setDate(end.getDate() + 6); 
+
+            return {
+                start: formatDate(start),
+                end: formatDate(end)
+            };
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+    </script>
+}
