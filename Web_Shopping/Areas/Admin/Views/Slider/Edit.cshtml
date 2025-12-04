@@ -8,19 +8,19 @@
         <input type="hidden" asp-for="@Model.Id" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label>Name</label>
+            <label>Tên</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger" />
         </div>
 
         <div class="form-group">
-            <label>Description</label>
+            <label>Mô tả</label>
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger" />
         </div>
 
         <div class="form-group">
-            <label>Status</label>
+            <label>Trạng thái</label>
             <select asp-for="Status" class="form-control">
                 @if (@Model.Status == 1) {
                     <option selected value="1">Hiển thị</option>
@@ -35,7 +35,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label>Image</label>
+            <label>Hình ảnh</label>
             <input asp-for="ImageUpLoad" class="form-control-file" />
             <span asp-validation-for="ImageUpLoad" class="text-danger" />
             <img src="~/media/slider/@Model.Image" width="100" height="80" />

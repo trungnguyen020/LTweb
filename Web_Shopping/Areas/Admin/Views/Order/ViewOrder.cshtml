@@ -65,11 +65,10 @@
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Order Code</th>
-            <th scope="col">ProductName</th>
-            <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Subtotal</th>
+            <th scope="col">Tên sản phẩm</th>
+            <th scope="col">Giá</th>
+            <th scope="col">Số Lượng</th>
+            <th scope="col">Tổng tiền</th>
         </tr>
     </thead>
     <tbody>
@@ -78,14 +77,12 @@
             Subtotal = item.Quantity * item.Price;
             Total += Subtotal;
             <tr>
-                <!-- SỬA LỖI 2: Xóa input hidden 'getId' ở đây -->
-                <!-- SỬA LỖI 3: Đổi 'th' thành 'td' -->
+
                 <td>#</td>
-                <td>@item.OrderCode</td>
                 <td>@item.Product.Name</td>
-                <td>@item.Price.ToString("C")</td> <!-- Thêm định dạng tiền tệ -->
+                <td>@item.Price.ToString("C")</td> 
                 <td>@item.Quantity</td>
-                <td>@Subtotal.ToString("C")</td> <!-- Thêm định dạng tiền tệ -->
+                <td>@Subtotal.ToString("C")</td> 
             </tr>
         }
         <tr>

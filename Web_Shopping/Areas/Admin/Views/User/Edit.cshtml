@@ -9,7 +9,7 @@
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label>UserName</label>
+            <label>Tên</label>
             <input asp-for="UserName" required class="form-control" />
             <span asp-validation-for="UserName" class="text-danger" />
         </div>
@@ -19,13 +19,13 @@
             <span asp-validation-for="Email" class="text-danger" />
         </div>
         <div class="form-group">
-            <label>Password</label>
+            <label>Mật khẩu</label>
             <input asp-for="PasswordHash" readonly required class="form-control" />
             <span asp-validation-for="PasswordHash" class="text-danger" />
         </div>
 
         <div class="form-group">
-            <label>Roles</label>
+            <label>Phân quyền</label>
             <select asp-for="RoleId" class="form-control" asp-items="ViewBag.Roles">
             </select>
             <span asp-validation-for="RoleId" class="text-danger" />

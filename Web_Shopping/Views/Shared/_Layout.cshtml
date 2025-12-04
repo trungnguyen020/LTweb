@@ -13,6 +13,8 @@
     <link href="~/css/main.css" rel="stylesheet">
     <link href="~/css/responsive.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="~/js/jquery.js"></script>
     <style>
         .swal2-container {
             z-index: 99999 !important;
@@ -195,11 +197,11 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <form asp-action="Search" asp-controller="Product" method="post">
-                            <div class="search_box pull-right" style="display: flex;">
-                                <input type="text" placeholder="Tìm kiếm..." name="searchTerm" />
-                                <button type="submit"><i class="fa fa-search"></i></button>
+                    <div class="col-sm-3">
+                        <form asp-controller="Product" asp-action="Search" method="get">
+                            <div class="search_box pull-right">
+                                <input type="text" placeholder="Tìm kiếm" name="searchTerm" value="@ViewBag.Keyword" />
+                                <button class="btn btn-warning" type="submit" style="margin-top:0;">Tìm</button>
                             </div>
                         </form>
                     </div>
@@ -274,10 +276,10 @@
         </div>
     </footer>
 
-    <script src="~/js/jquery.js"></script>
+    
     <script src="~/js/bootstrap.min.js"></script>
     <script src="~/js/jquery.scrollUp.min.js"></script>
-    <script src="~/js/price-range.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script src="~/js/jquery.prettyPhoto.js"></script>
     <script src="~/js/main.js"></script>
     <script src="~/backend/js/site.js"></script>

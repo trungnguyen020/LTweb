@@ -73,14 +73,31 @@ namespace Web_Shopping.Controllers
                 return Redirect(Request.Headers["Referer"]);
             }
         }
-        public async Task<IActionResult> Search(string searchTerm)
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchTerm, double? minPrice, double? maxPrice)
         {
-            var products = await _dataContext.Products
-                .Where(p=>p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm))
-                .ToListAsync();
-            ViewBag.Keyword = searchTerm;
+            var products = _dataContext.Products
+                            .Include(p => p.Category)
+                            .Include(p => p.Brand)
+                            .AsQueryable();
 
-            return View(products);
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                products = products.Where(p => p.Name.Contains(searchTerm));
+                ViewBag.Keyword = searchTerm; 
+            }
+
+            if (minPrice.HasValue && maxPrice.HasValue)
+            {
+                decimal min = (decimal)minPrice.Value;
+                decimal max = (decimal)maxPrice.Value;
+
+                products = products.Where(p => p.Price >= min && p.Price <= max);
+            }
+
+            var result = await products.ToListAsync();
+
+            return View("Search", result);
         }
     }
 }

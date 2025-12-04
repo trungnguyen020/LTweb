@@ -1,37 +1,54 @@
 ﻿@model IEnumerable<ProductModel>
 @{
-	ViewData["Title"] = @ViewBag.Keyword;
+    ViewData["Title"] = "Kết quả tìm kiếm";
 }
-<div class="col-sm-3">
-	@Html.Partial("_SidebarPartial")
-</div>
 
-<div class="col-sm-9 padding-right">
-	<div class="features_items">
-		<!--features_items-->
-		<h2 class="title text-center">@ViewBag.Keyword</h2>
-		@foreach (var item in Model)
-		{
-			<div class="col-sm-4">
-				<div class="product-image-wrapper">
-					<a>
-						<div class="single-products">
-							<div class="productinfo text-center">
-								<a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">
-									<img src="~/media/products/@item.Image" alt="@item.Name" width="100%" height="200" />
-									<h2>@item.Price</h2>
-									<p>@item.Name</p>
-								</a>
-								<p>Danh mục: @item.Category.Name</p>
-								<p>Thương hiệu: @item.Brand.Name</p>
-								<a class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id"><i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</a>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-		}
+<div class="row">
+    <div class="col-sm-3">
+        @Html.Partial("_SidebarPartial")
+    </div>
 
-	</div><!--features_items-->
+    <div class="col-sm-9 padding-right">
+        <div class="features_items">
+            <h2 class="title text-center">
+                @if (!string.IsNullOrEmpty(ViewBag.Keyword))
+                {
+                    <span>Kết quả cho: "@ViewBag.Keyword"</span>
+                }
+                else
+                {
+                    <span>Tất cả sản phẩm</span>
+                }
+            </h2>
 
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="col-sm-4">
+                        <div class="product-image-wrapper">
+                            <div class="single-products">
+                                <div class="productinfo text-center">
+                                    <a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">
+                                        <img src="~/media/products/@item.Image" alt="@item.Name" style="height: 200px; object-fit: contain;" />
+                                        <h2>@item.Price.ToString("#,##0 VNĐ")</h2>
+                                        <p>@item.Name</p>
+                                    </a>
+                                    <a class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">
+                                        <i class="fa fa-shopping-cart"></i> Thêm vào giỏ
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-warning text-center">
+                    <h4>Không tìm thấy sản phẩm nào phù hợp!</h4>
+                </div>
+            }
+        </div>
+    </div>
 </div>

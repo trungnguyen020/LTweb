@@ -7,10 +7,57 @@
 		
 	</div><!--/category-products-->
 	<h2>Thương hiệu</h2>
-	<div class="panel-group category-products" id="accordian">
+    <div class="panel-group category-products" id="accordian-brands">
 		<!--category-productsr-->
 
 		<vc:brands></vc:brands>
 
+        <div class="price-range">
+            <h2>Tìm theo giá</h2>
+            <div class="well text-center">
+                <form asp-controller="Product" asp-action="Search" method="get">
+
+                    <div id="slider-range"></div>
+                    <br>
+                    <b class="pull-left">0đ</b> <b class="pull-right">100tr</b>
+
+                    <input type="hidden" name="minPrice" id="minPrice" value="0">
+                    <input type="hidden" name="maxPrice" id="maxPrice" value="100000000">
+
+                    <input type="hidden" name="searchTerm" value="@ViewBag.Keyword">
+
+                    <div style="margin: 15px 0;">
+                        <input type="text" id="amount" readonly style="border:0; color:#FE980F; font-weight:bold; width:100%; text-align:center; background: transparent;">
+                    </div>
+
+                    <button type="submit" class="btn btn-default add-to-cart">Lọc giá</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                const formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
+
+                $("#slider-range").slider({
+                    range: true,
+                    min: 0,
+                    max: 100000000,
+                    step: 500000,
+                    values: [0, 100000000],
+                    slide: function (event, ui) {
+                        $("#amount").val(formatter.format(ui.values[0]) + " - " + formatter.format(ui.values[1]));
+                        // Gán giá trị vào input ẩn
+                        $("#minPrice").val(ui.values[0]);
+                        $("#maxPrice").val(ui.values[1]);
+                    }
+                });
+
+                $("#amount").val(
+                    formatter.format($("#slider-range").slider("values", 0)) + " - " + formatter.format($("#slider-range").slider("values", 1))
+                );
+            });
+        </script>
+		
 	</div>
 </div>

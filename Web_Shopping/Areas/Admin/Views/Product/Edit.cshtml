@@ -7,36 +7,36 @@
     <form asp-action="Edit" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label>Name</label>
+            <label>Tên</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger" />
         </div>
         <div class="form-group">
-            <label>Price</label>
+            <label>Giá</label>
             <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger" />
         </div>
         <div class="form-group">
-            <label>Description</label>
+            <label>Mô tả</label>
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger" />
         </div>
         <div class="form-group">
-            <label>Category</label>
+            <label>Danh mục</label>
             <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
                 <option>--Choose a category</option>
             </select>
             <span asp-validation-for="CategoryId" class="text-danger" />
         </div>
         <div class="form-group">
-            <label>Brand</label>
+            <label>Thương hiệu</label>
             <select asp-for="BrandId" class="form-control" asp-items="ViewBag.Brands">
                 <option>--Choose a brand</option>
             </select>
             <span asp-validation-for="BrandId" class="text-danger" />
         </div>
         <div class="form-group">
-            <label>Image</label>
+            <label>Hình ảnh</label>
             <input asp-for="ImageUpLoad" class="form-control-file" />
             <span asp-validation-for="ImageUpLoad" class="text-danger" />
             <img src="~/media/products/@Model.Image" width="100" height="80" />
